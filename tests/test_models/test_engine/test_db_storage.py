@@ -14,6 +14,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from unittest.mock import patch
 import json
 import os
 import pep8
@@ -74,7 +75,12 @@ class TestFileStorage(unittest.TestCase):
     def setUpClass(cls):
         """Setup db and initialize sorage"""
         cls.storage = db_storage.DBStorage()
-        cls.storage.reload()
+
+    @patch('models.engine.db_storage.DBStorage.reload')
+    def test_reload(self, mock_reload):
+        """Test reload method"""
+        self.storage.reload()
+        mock_reload.assert_called_once()
 
     @classmethod
     def tearDownClass(cls):
